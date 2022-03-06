@@ -4,8 +4,8 @@ import unittest
 from werkzeug.security import generate_password_hash
 path='../threatnote/'
 sys.path.append(path)
-from main import app, db, add_db_entry
-from models import User, Organization, Requirements
+from threatnote.main import app, db, add_db_entry
+from threatnote.models import User, Organization, Requirements
  
  
 TEST_DB = 'tn_test.db'
@@ -90,7 +90,7 @@ class Tests(unittest.TestCase):
 
         response = self.logout()
         #made it to the Dashboard page
-        self.assertTrue('Sign in to Account' in response.data.decode())
+        self.assertTrue('Sign In' in response.data.decode())
         
         response = self.login(self.user_username, self.user_password)
         #made it to the Dashboard page
@@ -98,7 +98,7 @@ class Tests(unittest.TestCase):
 
         response = self.logout()
         #made it to the Dashboard page
-        self.assertTrue('Sign in to Account' in response.data.decode())
+        self.assertTrue('Sign In' in response.data.decode())
 
     def test_req(self):
         self.login(self.admin_username, self.admin_password)

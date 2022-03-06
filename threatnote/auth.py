@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from models import User, Organization
-from config import db
+from threatnote.models import User, Organization
+from threatnote.config import db
 from sqlalchemy import func
 import os
 import binascii

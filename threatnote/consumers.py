@@ -1,9 +1,9 @@
 from flask import  render_template, request, redirect, flash, url_for, jsonify, abort, Response
 from flask_login import login_required, current_user
-from models import Requirements, RequirementConsumers, User, Consumers,RequirementReports, Reports
-from lib import add_db_entry
-from main import app
-from config import db
+from threatnote.models import Requirements, RequirementConsumers, User, Consumers,RequirementReports, Reports
+from threatnote.lib import add_db_entry
+from threatnote.main import app
+from threatnote.config import db
 from sqlalchemy import func, asc, desc
 
 

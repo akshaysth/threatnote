@@ -5,8 +5,8 @@ from flask import jsonify
 from flask_login import current_user
 import re
 import json
-from config import db
-from models import Comments, User, Organization, Indicators, Links
+from threatnote.config import db
+from threatnote.models import Comments, User, Organization, Indicators, Links
 from sqlalchemy import func, asc, desc
 from datetime import datetime
 import json

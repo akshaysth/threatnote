@@ -5,12 +5,12 @@ import re
 import json
 from markdown2 import Markdown
 from io import StringIO
-from models import Links, Reports, Organization, Requirements, RequirementReports, RequirementConsumers, Indicators, ReportTags, User, Organization
-from lib import IP_REGEX, DOMAIN_REGEX,EMAIL_REGEX,SHA_REGEX,SHA512_REGEX,MD5_REGEX,ATTACK_REGEX, URL_REGEX, CVE_REGEX
-from lib import add_db_entry, get_comments,  get_user_info, escape_jquery, parse_indicators, send_webhook
-from main import app, queue
-from config import db
-from enrichers import export_to_misp
+from threatnote.models import Links, Reports, Organization, Requirements, RequirementReports, RequirementConsumers, Indicators, ReportTags, User, Organization
+from threatnote.lib import IP_REGEX, DOMAIN_REGEX,EMAIL_REGEX,SHA_REGEX,SHA512_REGEX,MD5_REGEX,ATTACK_REGEX, URL_REGEX, CVE_REGEX
+from threatnote.lib import add_db_entry, get_comments,  get_user_info, escape_jquery, parse_indicators, send_webhook
+from threatnote.main import app, queue
+from threatnote.config import db
+from threatnote.enrichers import export_to_misp
 from datetime import datetime
 from sqlalchemy import func, asc, desc
 
