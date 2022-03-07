@@ -1,6 +1,6 @@
 import unittest
 
-from main import active_reports
+# from threatnote.main import active_reports
 
 class active_reports(unittest.TestCase):
     def test_list_reports(self):

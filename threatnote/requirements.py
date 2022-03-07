@@ -1,10 +1,10 @@
 from flask import  render_template, request, redirect, flash, url_for, jsonify, abort, Response
 from flask_login import login_required, current_user
 from flask_weasyprint import HTML, render_pdf
-from models import Indicators, Requirements, Reports, Links, User, Consumers, Organization, ReportTags,RequirementReports, RequirementConsumers,Comments
-from lib import add_db_entry, get_comments, send_webhook
-from main import app
-from config import db
+from threatnote.models import Indicators, Requirements, Reports, Links, User, Consumers, Organization, ReportTags,RequirementReports, RequirementConsumers,Comments
+from threatnote.lib import add_db_entry, get_comments, send_webhook
+from threatnote.main import app
+from threatnote.config import db
 import json
 from datetime import datetime
 

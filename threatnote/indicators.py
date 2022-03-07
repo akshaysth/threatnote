@@ -1,9 +1,9 @@
 from flask import  render_template, request, redirect, flash, url_for, jsonify, abort, Response
 from flask_login import login_required, current_user
-from models import Indicators,  Reports, Links, User
-from lib import add_db_entry, get_comments, get_user_info
-from main import app, parse_indicators, queue
-from config import db
+from threatnote.models import Indicators,  Reports, Links, User
+from threatnote.lib import add_db_entry, get_comments, get_user_info
+from threatnote.main import app, parse_indicators, queue
+from threatnote.config import db
 from sqlalchemy import func, asc, desc
 
 

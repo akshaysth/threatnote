@@ -2,11 +2,11 @@ import os
 import binascii
 from flask import  render_template, request, redirect, flash, url_for, jsonify, abort, Response
 from flask_login import login_required, current_user
-from models import User, Organization
-from lib import add_db_entry, get_comments
-from main import app
-from config import db
-from lib import add_db_entry, get_user_info
+from threatnote.models import User, Organization
+from threatnote.lib import add_db_entry, get_comments
+from threatnote.main import app
+from threatnote.config import db
+from threatnote.lib import add_db_entry, get_user_info
 from werkzeug.security import generate_password_hash, check_password_hash
 
 @app.route('/user_webhooks', methods=['GET', 'POST'])

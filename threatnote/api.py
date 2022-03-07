@@ -1,6 +1,6 @@
-from  main import app
-from  main import db
-from  models import User, Indicators, Links
+from threatnote.main import app
+from threatnote.main import db
+from threatnote.models import User, Indicators, Links
 
 from flask import request, redirect, jsonify 
 from flask_login import current_user, login_user

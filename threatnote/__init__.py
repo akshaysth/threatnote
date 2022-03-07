@@ -1,5 +1,5 @@
-from .config import db
-from .config import create_app
-from . import api as Api
+from threatnote.config import db
+from threatnote.config import create_app
+from threatnote import api as Api
 
 

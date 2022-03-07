@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from config import db
+from threatnote.config import db
 
 class Organization(db.Model): 
     id = db.Column(db.Integer, primary_key=True) 

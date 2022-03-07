@@ -13,7 +13,7 @@ from pymisp import ExpandedPyMISP, MISPEvent, MISPAttribute
 app= current_app
 
 #let's import for the same place for everything
-from lib import IP_REGEX, DOMAIN_REGEX,EMAIL_REGEX,SHA_REGEX,SHA512_REGEX,MD5_REGEX,ATTACK_REGEX, URL_REGEX, CVE_REGEX
+from threatnote.lib import IP_REGEX, DOMAIN_REGEX,EMAIL_REGEX,SHA_REGEX,SHA512_REGEX,MD5_REGEX,ATTACK_REGEX, URL_REGEX, CVE_REGEX
 #IP_REGEX = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 #DOMAIN_REGEX = r'(?:(?:[\da-zA-Z])(?:[_\w-]{,62})\.){,127}(?:(?:[\da-zA-Z])[_\w-]{,61})?(?:[\da-zA-Z]\.(?:(?:xn\-\-[a-zA-Z\d]+)|(?:[a-zA-Z\d]{2,})))'
 #EMAIL_REGEX = r'\S+@\S+\.\S+'
@@ -58,8 +58,8 @@ def enrich_indicator(data):
         misp_url=app.config['MISP_URL']
     if not hibp_api_key:
         hibp_api_key=app.config['HIBP_API_KEY']
-    if not hunter_api_key:
-        hunter_api_key=app.config['HUNTER_API_KEY']
+#    if not hunter_api_key:
+#        hunter_api_key=app.config['HUNTER_API_KEY']
     
     # Determine type of indicator
     ip = re.findall(IP_REGEX,indicator)

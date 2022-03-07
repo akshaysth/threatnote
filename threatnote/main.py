@@ -1,7 +1,7 @@
-from config import create_app
-from config import db
-from enrichers import enrich_indicator, export_to_misp
-from models import Indicators, Requirements, Reports, Links, User, Consumers, Organization, ReportTags,RequirementReports, RequirementConsumers,Comments
+from threatnote.config import create_app
+from threatnote.config import db
+from threatnote.enrichers import enrich_indicator, export_to_misp
+from threatnote.models import Indicators, Requirements, Reports, Links, User, Consumers, Organization, ReportTags,RequirementReports, RequirementConsumers,Comments
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, flash, url_for, jsonify, abort, Response, send_from_directory
 from flask_login import login_required, current_user
@@ -12,7 +12,7 @@ from sqlalchemy import func, asc, desc
 from flask_wtf import CSRFProtect
 
 queue = rq.Queue('enricher', connection=Redis.from_url('redis://'))
-from lib import add_db_entry, get_comments, time_ago,escape_jquery, get_user_info, escape_jquery, parse_indicators
+from threatnote.lib import add_db_entry, get_comments, time_ago,escape_jquery, get_user_info, escape_jquery, parse_indicators
 
 main = Blueprint('main', __name__)
 
@@ -25,12 +25,12 @@ csrf.exempt("app.api_indicator_get")
 
 
 #these need to be imported after app is created
-import reports
-import requirements
-import consumers
-import indicators
-import settings
-import api
+import threatnote.reports
+import threatnote.requirements
+import threatnote.consumers
+import threatnote.indicators
+import threatnote.settings
+import threatnote.api
 
 
 def enrich_pipeline(json_str):
