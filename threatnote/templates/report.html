@@ -50,7 +50,7 @@ visibility: hidden;
 													  </button>
 													  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 													    <a class="dropdown-item" href="javascript: void(0)" id="misp_export">Export to MISP</a>
-													    <a class="dropdown-item" href="{{url_for('view_report', report_id=report_info.id, pdf=True)}}">Export as PDF</a>
+													    <a class="dropdown-item" href="{{url_for('reports_bp.view_report', report_id=report_info.id, pdf=True)}}">Export as PDF</a>
 													  </div>
 													</div>
 												</div>
@@ -77,7 +77,7 @@ visibility: hidden;
 												<div><span style="font-size:16px; word-wrap: break-word;">{{new_content | safe }}</span></div>
 													<div class="kt-separator kt-separator--space-lg kt-separator--border-dashed"></div>
 												<div class="text-left">
-												{% for tag in tags %} <a href="{{url_for('active_reports', tag=tag['tag'])}}"><span class="btn btn-primary rounded-sm btn-sm"> {{ tag['tag']}} </span></a>{% endfor %}
+												{% for tag in tags %} <a href="{{url_for('reports_bp.active_reports', tag=tag['tag'])}}"><span class="btn btn-primary rounded-sm btn-sm"> {{ tag['tag']}} </span></a>{% endfor %}
 											</div>
 												
 													
@@ -537,7 +537,7 @@ visibility: hidden;
 									                {% if indicator.get('related_reports') and indicator.get('related_reports').keys() | length > 0  %}
 									                <div style="font-weight:500;font-size:12px;color:#b0bac9;letter-spacing:1.12px;text-transform:uppercase;">IN REPORTS</div>
 										            	{% for (id, report) in indicator.get('related_reports').items() %}
-										            	<A HREF="{{url_for('view_report', report_id=id)}}"><span style="font-family:DM Sans;font-weight:400;font-size:14px;color:#2E384D;letter-spacing: normal;"><i class="flaticon2-medical-records kt-font-brand"></i>&nbsp;{{ report.friendly_id}}</span></A><br/>
+										            	<A HREF="{{url_for('reports_bp.view_report', report_id=id)}}"><span style="font-family:DM Sans;font-weight:400;font-size:14px;color:#2E384D;letter-spacing: normal;"><i class="flaticon2-medical-records kt-font-brand"></i>&nbsp;{{ report.friendly_id}}</span></A><br/>
 									                	{% endfor %}
 									                {% else %}
 										                <div style="font-weight:500 ;font-size:12px;color:#b0bac9;letter-spacing:1.12px;text-transform:uppercase;">NO RELATED REPORTS</div>
@@ -712,7 +712,7 @@ visibility: hidden;
         	$('#make_comment').click(function () {  
         		
         		if($('#new_comment').val() != '') {
-            	$.post('{{url_for('add_comment')}}',   // url
+            	$.post('{{url_for('main_bp.add_comment')}}',   // url
          		       { 'comment': $('#new_comment').val(), 'csrf_token':'{{csrf_token()}}', 'obj_type':'report', 'obj_id':'{{report_info.id}}', 'user':'{{user_info.id}}' }, // data to be submit
          		       function(data, status, jqXHR) {// success callback
          		                if(data=='success') {
@@ -732,7 +732,7 @@ visibility: hidden;
 
             $('#misp_export').click(function () {  
                 $('#misp_toast').toast('show');
-                $.get("{{url_for('export_misp', report_id=report_info.id)}}");
+                $.get("{{url_for('main_bp.export_misp', report_id=report_info.id)}}");
 	    	});
 
 
@@ -752,10 +752,10 @@ visibility: hidden;
 
             $('#refresh_indicator_{{indicator["id"]}}').click(function () {  
                 $('#refresh_indicator_toast_{{indicator["id"]}}').toast('show');
-                $.get("{{url_for('refresh_indicator', indicator_id=indicator.id, report_id=report_info.id)}}");
+                $.get("{{url_for('indicators_bp.refresh_indicator', indicator_id=indicator.id, report_id=report_info.id)}}");
 	    	});
         	$('#confidence_{{indicator["id"]}}').change(function () {
-            	$.post('{{url_for("update_indicator", report_id=report_info.id, indicator_id=indicator["id"])}}',   // url
+            	$.post('{{url_for("indicators_bp.update_indicator", report_id=report_info.id, indicator_id=indicator["id"])}}',   // url
             			{'confidence': this.value, 'csrf_token':'{{csrf_token()}}'}, // data to be submit
            		       function(data, status, jqXHR) {// success callback
            		                if(data!='success') {
@@ -765,7 +765,7 @@ visibility: hidden;
           		
 	        });
         	$('#kill_chain_{{indicator["id"]}}').change(function () {
-            	$.post('{{url_for("update_indicator", report_id=report_info.id, indicator_id=indicator["id"])}}',   // url
+            	$.post('{{url_for("indicators_bp.update_indicator", report_id=report_info.id, indicator_id=indicator["id"])}}',   // url
             			{'kill_chain': this.value, 'csrf_token':'{{csrf_token()}}'}, // data to be submit
            		       function(data, status, jqXHR) {// success callback
            		                if(data!='success') {
@@ -775,7 +775,7 @@ visibility: hidden;
 	        });
         	$('#diamond_model_{{indicator["id"]}}').change(function () {
         		switchDiamond({{indicator["id"]}},this.value);
-            	$.post('{{url_for("update_indicator", report_id=report_info.id, indicator_id=indicator["id"])}}',   // url
+            	$.post('{{url_for("indicators_bp.update_indicator", report_id=report_info.id, indicator_id=indicator["id"])}}',   // url
             			{'diamond_model': this.value, 'csrf_token':'{{csrf_token()}}'}, // data to be submit
            		       function(data, status, jqXHR) {// success callback
            		                if(data!='success') {
