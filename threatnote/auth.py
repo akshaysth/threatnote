@@ -56,9 +56,9 @@ def login_post():
     # reports = db.session.query(func.count(Reports.id)).scalar()
     # intel_reqs = db.session.query(func.count(Requirements.id)).scalar()
     if user.new_user:
-        return redirect(url_for("welcome"))
+        return redirect(url_for("main_bp.welcome"))
     else:
-        return redirect(url_for("homepage"))
+        return redirect(url_for("main_bp.homepage"))
 
 
 # @auth.route('/signup', methods=['POST'])
