@@ -107,9 +107,9 @@
 				$("#archivedSwitch").change(function(){
 					
 					if($(this).prop("checked") == true){
-						window.location.href = "{{ url_for('list_reqs', show_archived=True)}}"; 
+						window.location.href = "{{ url_for('reqs_bp.list_reqs', show_archived=True)}}"; 
 					} else {
-						window.location.href = "{{ url_for('list_reqs', show_archived=False)}}";  
+						window.location.href = "{{ url_for('reqs_bp.list_reqs', show_archived=False)}}";  
 					}
 				});
 

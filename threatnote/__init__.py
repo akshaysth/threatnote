@@ -49,17 +49,27 @@ def create_app(test_config=None):
         # since the user_id is just the primary key of our user table, use it in the query for the user
         return User.query.get(int(user_id))
 
+    # initialize template filter
+    from threatnote.lib import time_ago, escape_jquery, display_names
+
+    app.jinja_env.filters["time_ago"] = time_ago
+    app.jinja_env.filters["escape_jquery"] = escape_jquery
+    app.jinja_env.filters["display_names"] = display_names
+
     with app.app_context():
         # blueprint for auth routes in our app
+        from threatnote.lib import lib_bp as lib_blueprint
         from threatnote.auth import auth_bp as auth_blueprint
         from threatnote.main import main_bp as main_blueprint
         from threatnote.models import models_bp as models_blueprint
         from threatnote.requirements import reqs_bp as requirements_blueprint
         from threatnote.reports import reports_bp as reports_blueprint
         from threatnote.indicators import indicators_bp as indicators_blueprint
+        from threatnote.enrichers import enrichers_bp as enrichers_blueprint
         from threatnote.consumers import consumers_bp as consumers_blueprint
         from threatnote.settings import settings_bp as settings_blueprint
 
+    app.register_blueprint(lib_blueprint)
     app.register_blueprint(models_blueprint)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)

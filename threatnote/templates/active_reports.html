@@ -99,9 +99,9 @@
 				$("#archivedSwitch").change(function(){
 					
 					if($(this).prop("checked") == true){
-						window.location.href = "{{ url_for('list_reports', show_archived=True)}}"; 
+						window.location.href = "{{ url_for('reports_bp.list_reports', show_archived=True)}}"; 
 					} else {
-						window.location.href = "{{ url_for('list_reports', show_archived=False)}}";  
+						window.location.href = "{{ url_for('reports_bp.list_reports', show_archived=False)}}";  
 					}
 				});
 

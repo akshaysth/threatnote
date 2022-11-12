@@ -202,7 +202,7 @@
 		$('#make_comment').click(function () {  
         		
         		if($('#new_comment').val() != '') {
-            	$.post('{{url_for('add_comment')}}',   // url
+            	$.post('{{url_for('main_bp.add_comment')}}',   // url
          		       { 'comment': $('#new_comment').val(), 'csrf_token':'{{csrf_token()}}','obj_type':'requirement', 'obj_id':'{{req_info.id}}', 'user':'{{user_id}}' }, // data to be submit
          		       function(data, status, jqXHR) {// success callback
          		                if(data=='success') {
