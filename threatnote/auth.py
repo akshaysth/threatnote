@@ -1,36 +1,53 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from threatnote.models import User, Organization
-from threatnote.config import db
+from threatnote.models import User, Organization, db
+
+from . import loginmanager
 from sqlalchemy import func
 import os
 import binascii
 
-auth = Blueprint('auth', __name__)
+auth_bp = Blueprint(
+    "auth",
+    __name__,
+    template_folder="threatnote/templates",
+    static_url_path="threatnote/static",
+)
 
-@auth.route('/logout')
+
+@auth_bp.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect('/login')
+    return redirect("/login")
 
-@auth.route('/login')
+
+@auth_bp.route("/login")
 def login():
-    return render_template('login.html')
+    return render_template("login.html")
 
-@auth.route('/login', methods=['POST'])
+
+@loginmanager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return User.query.get(int(user_id))
+
+
+@auth_bp.route("/login", methods=["POST"])
 def login_post():
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = request.form.get("email")
+    password = request.form.get("password")
 
     user = User.query.filter_by(email=email).first()
 
     # check if user actually exists
     # take the user supplied password, hash it, and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('auth.login')) # if user doesn't exist or password is wrong, reload the page
+        flash("Please check your login details and try again.")
+        return redirect(
+            url_for("auth.login")
+        )  # if user doesn't exist or password is wrong, reload the page
 
     login_user(user)
 
@@ -39,9 +56,10 @@ def login_post():
     # reports = db.session.query(func.count(Reports.id)).scalar()
     # intel_reqs = db.session.query(func.count(Requirements.id)).scalar()
     if user.new_user:
-        return redirect(url_for('welcome'))        
+        return redirect(url_for("welcome"))
     else:
-        return redirect(url_for('homepage'))
+        return redirect(url_for("homepage"))
+
 
 # @auth.route('/signup', methods=['POST'])
 # def signup_post():
@@ -63,7 +81,7 @@ def login_post():
 #     if not org:
 #         flash('Invalid organization key')
 #         return redirect(url_for('auth.signup'))
-    
+
 #     api_key = binascii.b2a_hex(os.urandom(16)).decode()
 #     if not name:
 #         name = request.form.get('email').split("@")[0]
@@ -71,8 +89,8 @@ def login_post():
 #     new_user = User(email=email, password=generate_password_hash(password, method='sha256'),
 #                     vt_api_key='',
 #                     organization=org.id,
-#                     tn_api_key=api_key, 
-#                     name=name, 
+#                     tn_api_key=api_key,
+#                     name=name,
 #                     role='User')
 
 #     # add the new user to the database
@@ -80,4 +98,3 @@ def login_post():
 #     db.session.commit()
 
 #     return redirect(url_for('auth.login'))
-

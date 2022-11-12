@@ -1,12 +1,29 @@
+from flask import Blueprint
 from flask_login import UserMixin
-from threatnote.config import db
+from flask_sqlalchemy import SQLAlchemy
 
-class Organization(db.Model): 
-    id = db.Column(db.Integer, primary_key=True) 
-    name = db.Column(db.String(200), unique=True) 
-    org_key =db.Column(db.String(100), unique=True)# some key for new users to register wth
-    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()) 
+# from threatnote.config import db
+
+db = SQLAlchemy()
+
+models_bp = Blueprint(
+    "models_bp",
+    __name__,
+    template_folder="threatnote/templates",
+    static_folder="threatnote/static",
+)
+
+
+class Organization(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), unique=True)
+    org_key = db.Column(
+        db.String(100), unique=True
+    )  # some key for new users to register wth
+    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
     whois_enabled = db.Column(db.Boolean, default=True)
     ipinfo_enabled = db.Column(db.Boolean, default=True)
     vt_enabled = db.Column(db.Boolean, default=False)
@@ -36,30 +53,41 @@ class Organization(db.Model):
     slack_webhook_on_req_create = db.Column(db.Boolean, default=False)
     slack_webhook_on_req_update = db.Column(db.Boolean, default=False)
 
+
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
-    organization = db.Column(db.Integer, db.ForeignKey('organization.id'))# add foreign key 
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
+    organization = db.Column(
+        db.Integer, db.ForeignKey("organization.id")
+    )  # add foreign key
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     tn_api_key = db.Column(db.String(50))
-    role = db.Column(db.String(50), default='user')
-    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now())  
+    role = db.Column(db.String(50), default="user")
+    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
     new_user = db.Column(db.Boolean, default=True)
 
 
 class Indicators(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
     indicator = db.Column(db.String(500), unique=True)
-    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    last_seen = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()) 
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_seen = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_updated = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
     indicator_type = db.Column(db.String(1000))
-    #diamond_model = db.Column(db.String(1000))
-    #kill_chain = db.Column(db.String(1000))
-    #confidence = db.Column(db.String(1000))
-    
+    # diamond_model = db.Column(db.String(1000))
+    # kill_chain = db.Column(db.String(1000))
+    # confidence = db.Column(db.String(1000))
+
     # ipinfo.io Enrichment
     ipinfo_hostname = db.Column(db.String(100))
     ipinfo_city = db.Column(db.String(1000))
@@ -88,10 +116,10 @@ class Indicators(db.Model):
     vt_positives = db.Column(db.String(1000))
 
     # Emailrep Enrichment
-    emailrep_reputation= db.Column(db.String(1000))
+    emailrep_reputation = db.Column(db.String(1000))
     emailrep_suspicious = db.Column(db.String(1000))
     emailrep_references = db.Column(db.String(1000))
-    emailrep_blacklisted= db.Column(db.String(1000))
+    emailrep_blacklisted = db.Column(db.String(1000))
     emailrep_maliciousactivity = db.Column(db.String(1000))
     emailrep_credsleaked = db.Column(db.String(1000))
     emailrep_databreach = db.Column(db.String(1000))
@@ -126,7 +154,7 @@ class Indicators(db.Model):
     urlscan_malicious = db.Column(db.String(100000))
 
     # RiskIQ
-    risk_classifications=db.Column(db.String(100000))
+    risk_classifications = db.Column(db.String(100000))
     risk_sinkhole = db.Column(db.String(100000))
     risk_evercompromised = db.Column(db.String(100000))
     risk_primarydomain = db.Column(db.String(100000))
@@ -158,10 +186,10 @@ class Indicators(db.Model):
     misp_dateadded = db.Column(db.String(100000))
     misp_comment = db.Column(db.String(100000))
 
-    #HIBP
+    # HIBP
     hibp_breaches = db.Column(db.String(100000))
 
-    #Hunter
+    # Hunter
     hunter_result = db.Column(db.String(100000))
     hunter_score = db.Column(db.String(100000))
     hunter_disposable = db.Column(db.String(100000))
@@ -171,8 +199,11 @@ class Indicators(db.Model):
     hunter_smtp_check = db.Column(db.String(100000))
     hunter_blocked = db.Column(db.String(100000))
 
+
 class Requirements(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
     friendly_id = db.Column(db.String(100), unique=True)
     title = db.Column(db.String(500))
     owner = db.Column(db.String(100))
@@ -182,62 +213,97 @@ class Requirements(db.Model):
     collection_requirements = db.Column(db.String(10000))
     deliverables = db.Column(db.String(10000))
     time_requirement = db.Column(db.Date())
-    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()) 
+    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
     creator = db.Column(db.String(100))
     is_archived = db.Column(db.Boolean, default=False)
+
+
 #    consumers = db.Column(db.String(1000))
 
+
 class Reports(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
     title = db.Column(db.String(500))
     content = db.Column(db.String(100000))
-    creator = db.Column(db.String(100))   
-    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()) 
+    creator = db.Column(db.String(100))
+    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
     friendly_id = db.Column(db.String(100))
     is_archived = db.Column(db.Boolean, default=False)
-    #tags = db.Column(db.String(1000))
-#    linked_reqs = db.Column(db.String(1000))
+    # tags = db.Column(db.String(1000))
+    #    linked_reqs = db.Column(db.String(1000))
     tlp = db.Column(db.String(100))
+
+
 #    consumers = db.Column(db.String(10000))
 
+
 class ReportTags(db.Model):
-    report = db.Column(db.Integer, db.ForeignKey('reports.id'), primary_key=True)
+    report = db.Column(db.Integer, db.ForeignKey("reports.id"), primary_key=True)
     tag = db.Column(db.String(100), nullable=False, primary_key=True)
-       
+
+
 class Links(db.Model):
-#    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
-    indicator = db.Column(db.Integer, db.ForeignKey('indicators.id'), primary_key=True)# add foreign key 
-    report = db.Column(db.Integer, db.ForeignKey('reports.id'), primary_key=True)# add foreign key 
+    #    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    indicator = db.Column(
+        db.Integer, db.ForeignKey("indicators.id"), primary_key=True
+    )  # add foreign key
+    report = db.Column(
+        db.Integer, db.ForeignKey("reports.id"), primary_key=True
+    )  # add foreign key
     diamond_model = db.Column(db.String(1000))
     kill_chain = db.Column(db.String(1000))
     confidence = db.Column(db.String(1000))
-    
+
+
 class Consumers(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
-    organization = db.Column(db.Integer, db.ForeignKey('organization.id'))# add foreign key 
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
+    organization = db.Column(
+        db.Integer, db.ForeignKey("organization.id")
+    )  # add foreign key
     name = db.Column(db.String(100))
     email = db.Column(db.String(100))
     poc = db.Column(db.String(100))
     subtitle = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()) 
+    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
+
 
 class RequirementConsumers(db.Model):
-    consumer = db.Column(db.Integer, db.ForeignKey('consumers.id'), primary_key=True)
-    requirement = db.Column(db.Integer, db.ForeignKey('requirements.id'), primary_key=True)
+    consumer = db.Column(db.Integer, db.ForeignKey("consumers.id"), primary_key=True)
+    requirement = db.Column(
+        db.Integer, db.ForeignKey("requirements.id"), primary_key=True
+    )
+
 
 class RequirementReports(db.Model):
-    requirement = db.Column(db.Integer, db.ForeignKey('requirements.id'), primary_key=True)
-    report = db.Column(db.Integer, db.ForeignKey('reports.id'), primary_key=True)
+    requirement = db.Column(
+        db.Integer, db.ForeignKey("requirements.id"), primary_key=True
+    )
+    report = db.Column(db.Integer, db.ForeignKey("reports.id"), primary_key=True)
+
 
 class Comments(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
-    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    report = db.Column(db.Integer, db.ForeignKey('reports.id'), nullable=True)
-    requirement = db.Column(db.Integer, db.ForeignKey('reports.id'), nullable=True)
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
+    user = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    report = db.Column(db.Integer, db.ForeignKey("reports.id"), nullable=True)
+    requirement = db.Column(db.Integer, db.ForeignKey("reports.id"), nullable=True)
     comment = db.Column(db.String(100000), nullable=True)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now()) 
-    updated_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()) 
-    indicator = db.Column(db.Integer, db.ForeignKey('indicators.id'), nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    updated_at = db.Column(
+        db.DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now()
+    )
+    indicator = db.Column(db.Integer, db.ForeignKey("indicators.id"), nullable=True)
