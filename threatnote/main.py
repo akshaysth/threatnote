@@ -41,7 +41,6 @@ from threatnote.lib import (
     time_ago,
     escape_jquery,
     get_user_info,
-    escape_jquery,
     parse_indicators,
 )
 
@@ -51,7 +50,6 @@ main_bp = Blueprint(
     template_folder="threatnote/templates",
     static_folder="threatnote/static",
 )
-
 
 
 def enrich_pipeline(json_str):
@@ -342,51 +340,6 @@ def export_misp(report_id):
     return redirect(url_for("view_report", report_id=report.id))
 
 
-def display_names(value):
-    # this is the map of column names you can add as needed.
-    # CB assumed means I just guesed that this would be a good column name
-    column_map = {
-        "ipinfo_hostname": "Hostname",
-        "ipinfo_city": "City",
-        "ipinfo_region": "Region",
-        "ipinfo_postal": "Postal Code",
-        "ipinfo_country": "Country",
-        "ipinfo_org": "Organization",
-        "whois_registrar": "Registrar",
-        "whois_creationdate": "Creation Date",
-        "whois_expirationdate": "Expiration Date",
-        "whois_lastupdated": "Last Updated",
-        "vt_scan_date": "Scan Date",
-        "vt_positives": "Positives",
-        "last_seen": "Last Seen",
-        "kill_chain": "Kill Chain",
-        "av_reputation": "Reputation",
-        "av_malware_data": "Malware Data",
-        "av_url_data": "URL Data",
-        "av_passive_data": "Passive DNS Data",
-        "gn_tags": "Tags",
-        "gn_seen": "Seen",
-        "gn_classification": "Classification",
-        "gn_actor": "Actor",
-        "gn_last_seen": "Last Seen",
-        "gn_first_seen": "First Seen",
-        "hunter_result": "Verdict",
-        "hunter_score": "Score",
-        "hunter_disposable": "Disposable",
-        "hunter_webmail": "Webmail",
-        "hunter_mx_records": "MX Records",
-        "hunter_smtp_server": "SMTP Server",
-        "hunter_smtp_check": "SMTP Check",
-        "hunter_blocked": "Blocked",
-    }
-    # return blank if none
-    if value is None:
-        return ""
-    # if column name is in dict, return that, else replace _ with space and title case
-    else:
-        return column_map.get(value, value.replace("_", " ").title())
-
-
 @main_bp.route("/custom_search", methods=["GET"])
 @login_required
 def custom_search():
@@ -451,11 +404,6 @@ def add_comment(obj_type=None, obj_id=None, user=None, comment=None):
         add_db_entry(new_comment)
         return "success"
     return "Comment insert failed."
-
-
-# app.jinja_env.filters["time_ago"] = time_ago
-# app.jinja_env.filters["escape_jquery"] = escape_jquery
-# app.jinja_env.filters["display_names"] = display_names
 
 
 if __name__ == "__main__":
