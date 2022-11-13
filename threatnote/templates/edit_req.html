@@ -166,9 +166,9 @@ $(document).ready(function(){
 	$("#archivedSwitch").change(function(){
 		
 		if($(this).prop("checked") == true){
-			window.location.href = "{{ url_for('archive_req', req_id=req_info.id, landing='edit_req')}}"; 
+			window.location.href = "{{ url_for('reqs_bp.archive_req', req_id=req_info.id, landing='edit_req')}}"; 
 		} else {
-			window.location.href = "{{ url_for('unarchive_req', req_id=req_info.id, landing='edit_req')}}";  
+			window.location.href = "{{ url_for('reqs_bp.unarchive_req', req_id=req_info.id, landing='edit_req')}}";  
 		}
 	});
 
@@ -177,7 +177,7 @@ $(document).ready(function(){
 		event.preventDefault(); 
 		var ok=false;
 		var fid=encodeURIComponent($("#friendly_id").val());
-		var jqxhr = $.getJSON('{{url_for("req_friendly_id_check")}}?friendly_id='+fid, function(data) {
+		var jqxhr = $.getJSON('{{url_for("reqs_bp.req_friendly_id_check")}}?friendly_id='+fid, function(data) {
 			  console.log( "success" );
 			})
 			  .done(function(data) {

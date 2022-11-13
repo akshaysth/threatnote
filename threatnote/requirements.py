@@ -155,7 +155,9 @@ def archive_req(req_id):
     db.session.commit()
     db.session.flush()
     flash("Requirement archived.")
-    return redirect(url_for(request.args.get("landing", "edit_req"), req_id=req_id))
+    return redirect(
+        url_for(request.args.get("landing", "reqs_bp.edit_req"), req_id=req_id)
+    )
 
 
 @reqs_bp.route("/unarchive_req/<req_id>", methods=["GET", "POST"])
@@ -166,7 +168,9 @@ def unarchive_req(req_id):
     db.session.commit()
     db.session.flush()
     flash("Requirement archived.")
-    return redirect(url_for(request.args.get("landing", "edit_req"), req_id=req_id))
+    return redirect(
+        url_for(request.args.get("landing", "reqs_bp.edit_req"), req_id=req_id)
+    )
 
 
 # @reqs_bp.route('/archived_reqs')
@@ -199,7 +203,7 @@ def delete_req(req_id):
     RequirementConsumers.query.filter_by(requirement=req_id).delete()
 
     db.session.commit()
-    return redirect(url_for("list_reqs"))
+    return redirect(url_for("reqs_bp.list_reqs"))
 
 
 @reqs_bp.route("/edit_req/<req_id>")
@@ -281,7 +285,9 @@ def submit_ir():
         ).all()
         hooks = [hook.slack_webhook for hook in hooks if hook.slack_webhook]
         message = "Intel requirement, {}, has been updated. To view the requirement, go to {}{}".format(
-            req.friendly_id, request.host_url[0:-1], url_for("view_req", req_id=req.id)
+            req.friendly_id,
+            request.host_url[0:-1],
+            url_for("reqs_bp.view_req", req_id=req.id),
         )
         wh_data = {
             "attachments": [
@@ -332,7 +338,9 @@ def submit_ir():
         ).all()
         hooks = [hook.slack_webhook for hook in hooks if hook.slack_webhook]
         message = "A new intel requirement, {}, has been created. To view the requirement, go to {}{}".format(
-            req.friendly_id, request.host_url[0:-1], url_for("view_req", req_id=req.id)
+            req.friendly_id,
+            request.host_url[0:-1],
+            url_for("reqs_bp.view_req", req_id=req.id),
         )
         wh_data = {
             "attachments": [
@@ -370,7 +378,7 @@ def submit_ir():
         consumer_ids=consumer_ids_from_tagify(form_data.get("consumers"), org_id),
     )
 
-    return redirect(url_for("list_reqs"))
+    return redirect(url_for("reqs_bp.list_reqs"))
 
 
 @reqs_bp.route("/req/<req_id>")
