@@ -172,7 +172,6 @@ else years ago
 """
 
 
-# @lib_bp.app_template_filter("time_ago")
 def time_ago(time):
     diff_seconds = (datetime.now() - time).total_seconds()
     MINUTE = 60
