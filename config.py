@@ -15,6 +15,8 @@ class Config:
     FLASK_APP = "wsgi.py"
     FLASK_DEBUG = True
     SERVER_NAME = environ.get("SERVER_NAME") or "127.0.0.1:3000"
+    ORGANIZATION_NAME = "threatnote.io"
+    ORGANIZATION_KEY = "temp_key_12345"
 
     # API Keys
     OTX_API_KEY = environ.get("OTX_API_KEY")
@@ -44,3 +46,19 @@ class Config:
         environ.get("SQLALCHEMY_DATABASE_URI")
         or f"sqlite:///{path.join(basedir, 'threatnote/db/threatnote.db')}"
     )
+
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "mysql://user@localhost/foo"
+
+
+class DevelopmentConfig(Config):
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{path.join(basedir, 'threatnote/db/dev.db')}"
+    ORGANIZATION_KEY = "dev"
+
+
+class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
+    ORGANIZATION_KEY = "testing"
+    TESTING = True
+    WTF_CSRF_ENABLED = False
